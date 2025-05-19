@@ -1,0 +1,29 @@
+name: Build ODT (Preview)
+
+on:
+  push:
+    branches: [main]
+    paths: ['**.md']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+
+      - name: Generate documents
+        run: ./build
+
+      - name: Upload documents as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-preview
+          path: output/*
